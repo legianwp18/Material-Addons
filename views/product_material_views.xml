@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="material_template_form_view" model="ir.ui.view">
+            <field name="name">product.material.form</field>
+            <field name="model">product.material</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="Material">
+                    <sheet>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name" string="Material Name"/>
+                            <h1><field name="name" placeholder="Material Name"/></h1>
+                        </div>
+                        <notebook>
+                            <page string="General Information" name="general_information">
+                                <group>
+                                    <group name="group_general">
+                                        <field name="material_code"/>
+                                        <field name="material_type"/>
+                                        <field name="supplier_id"/>
+                                    </group>
+                                    <group name="group_material_buy_price">
+                                        <label for="material_buy_price"/>
+                                        <div name="material_buy_price_uom" class="o_row">
+                                            <field name="material_buy_price" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}" />
+                                        </div>
+                                        <field name="currency_id" groups="base.group_multi_currency"/>
+                                        <field name="company_id" groups="base.group_multi_company"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="material_tree_view" model="ir.ui.view">
+            <field name="name">product.material.tree</field>
+            <field name="model">product.material</field>
+            <field eval="7" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Material" multi_edit="1" duplicate="false" sample="1">
+                    <field name="material_code" optional="show" readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="material_type" optional="show" readonly="1"/>
+                    <field name="material_buy_price" widget='monetary' optional="show" readonly="1"/>
+                    <field name="supplier_id" optional="show" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="material_search_form_view" model="ir.ui.view">
+            <field name="name">product.material.search</field>
+            <field name="model">product.material</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <search string="Material">
+                    <field name="name" string="Material"/>
+                    <separator/>
+                    <filter string="Fabric" name="filter_fabric" domain="[('material_type','=','Fabric')]"/>
+                    <filter string="Jeans" name="filter_jeans" domain="[('material_type','=','Jeans')]"/>
+                    <filter string="Cotton" name="filter_cotton" domain="[('material_type','=','Cotton')]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Material Type" name="material_type" context="{'group_by':'material_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="material_action" model="ir.actions.act_window">
+            <field name="name">Material</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.material</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="material_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new material
+              </p>
+            </field>
+        </record>
+
+        <menuitem name="Material" id="material_root_menu"/>
+        <menuitem name="Material" id="material_menu" parent="material_root_menu" action="material_action"/>
+
+    </data>
+</odoo>
